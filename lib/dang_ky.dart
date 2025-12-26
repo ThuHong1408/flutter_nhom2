@@ -40,7 +40,6 @@ class _MyRegisterState extends State<DangKy> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // ===== HEADER CÓ NÚT QUAY LẠI =====
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -53,7 +52,6 @@ class _MyRegisterState extends State<DangKy> {
               bottom: false,
               child: Row(
                 children: [
-                  // Nút quay lại
                   IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
                     onPressed: () {
@@ -61,7 +59,6 @@ class _MyRegisterState extends State<DangKy> {
                     },
                   ),
 
-                  // Tiêu đề
                   const Expanded(
                     child: Text(
                       'Form Đăng ký tài khoản',

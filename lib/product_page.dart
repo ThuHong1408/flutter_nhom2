@@ -1,10 +1,7 @@
-// File: product_page.dart
-
 import 'package:flutter/material.dart';
 import 'product_1.dart';
 import 'package:intl/intl.dart';
 import 'product_detail_page.dart';
-// Import Cart Model và Cart Page
 import 'cart_model.dart';
 import 'cart_page.dart';
 
@@ -50,13 +47,8 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  // Danh sách gốc (không đổi)
   final List<Product> allProducts = products;
-
-  // Danh sách hiển thị (thay đổi khi tìm kiếm)
   late List<Product> filteredProducts;
-
-  // Controller để quản lý ô nhập liệu tìm kiếm
   final TextEditingController _searchController = TextEditingController();
 
   @override

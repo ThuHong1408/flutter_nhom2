@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dang_nhap.dart'; // Import để quay về màn hình đăng nhập
+import 'dang_nhap.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String accessToken;
@@ -11,24 +11,24 @@ class ProfileScreen extends StatelessWidget {
     required this.userProfile,
   });
 
-  // --- HÀM XỬ LÝ ĐĂNG XUẤT ---
+  // ================= LOGOUT (SỬA LỖI Ở ĐÂY) =================
   void _xuLyDangXuat(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
+    Navigator.pushReplacement(
+      context,
       MaterialPageRoute(builder: (context) => const DangNhapScreen()),
-      (Route<dynamic> route) => false,
     );
   }
 
-  // Hiển thị dòng thông tin
+  // ================= UI HELPER =================
   Widget _buildInfoRow(String label, String value, {IconData? icon}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (icon != null)
             Padding(
-              padding: const EdgeInsets.only(right: 8.0),
+              padding: const EdgeInsets.only(right: 8),
               child: Icon(icon, color: Colors.teal, size: 20),
             ),
           SizedBox(
@@ -44,10 +44,9 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // Tiêu đề phần
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20.0, bottom: 8.0),
+      padding: const EdgeInsets.only(top: 20, bottom: 8),
       child: Text(
         title,
         style: const TextStyle(
@@ -59,13 +58,12 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  // ================= BUILD =================
   @override
   Widget build(BuildContext context) {
-    // Xử lý riêng cho màu tóc + kiểu tóc (tránh lỗi)
     String mauToc = userProfile['mau_toc'] ?? 'N/A';
     String kieuToc = userProfile['kieu_toc'] ?? '';
-
-    String mauKieuToc = (mauToc != 'N/A')
+    String mauKieuToc = mauToc != 'N/A'
         ? "$mauToc (${kieuToc.isNotEmpty ? kieuToc : 'Không rõ'})"
         : 'N/A';
 
@@ -77,16 +75,15 @@ class ProfileScreen extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(25.0),
+        padding: const EdgeInsets.all(25),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // --- THÔNG TIN CHUNG ---
+                  children: [
                     _buildSectionTitle('Thông tin Chung'),
                     _buildInfoRow(
                       'Họ tên',
@@ -114,7 +111,6 @@ class ProfileScreen extends StatelessWidget {
                       icon: Icons.location_on,
                     ),
 
-                    // --- SINH HỌC ---
                     _buildSectionTitle('Dữ liệu Sinh học'),
                     _buildInfoRow(
                       'Tuổi',
@@ -146,7 +142,6 @@ class ProfileScreen extends StatelessWidget {
                       icon: Icons.content_cut,
                     ),
 
-                    // --- CÔNG VIỆC ---
                     _buildSectionTitle('Công việc'),
                     _buildInfoRow(
                       'Công ty',
@@ -169,13 +164,12 @@ class ProfileScreen extends StatelessWidget {
                     const Text(
                       'Access Token (Mô phỏng):',
                       style: TextStyle(
-                        fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black54,
+                        fontSize: 14,
                       ),
                     ),
-
                     Container(
+                      margin: const EdgeInsets.only(top: 6),
                       padding: const EdgeInsets.all(8),
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -189,18 +183,15 @@ class ProfileScreen extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 12,
                           fontStyle: FontStyle.italic,
-                          color: Colors.black54,
                         ),
                       ),
                     ),
-
-                    const SizedBox(height: 20),
                   ],
                 ),
               ),
             ),
 
-            // --- NÚT ĐĂNG XUẤT ---
+            // ================= LOGOUT BUTTON =================
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -217,7 +208,6 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
           ],
         ),
       ),

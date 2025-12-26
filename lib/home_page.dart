@@ -12,7 +12,6 @@ class HomePage extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          // ---------- IMAGE ----------
           ClipRRect(
             borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(20),
@@ -26,7 +25,6 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
-          // ---------- TITLE SECTION ----------
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
             child: Row(
@@ -59,7 +57,6 @@ class HomePage extends StatelessWidget {
 
           const Divider(thickness: 1),
 
-          // ---------- BUTTON SECTION ----------
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Row(
@@ -74,7 +71,6 @@ class HomePage extends StatelessWidget {
 
           const Divider(thickness: 1),
 
-          // ---------- DESCRIPTION ----------
           const Padding(
             padding: EdgeInsets.all(20),
             child: Text(
@@ -90,7 +86,6 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// ---------- BUTTON COLUMN ----------
 class _ButtonColumn extends StatelessWidget {
   final IconData icon;
   final String label;

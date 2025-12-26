@@ -1,5 +1,3 @@
-// lib/cart_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_nhom2/cart_service.dart';
 
@@ -12,32 +10,45 @@ class CartScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Giỏ Hàng Của Bạn'),
         backgroundColor: Colors.blueGrey,
-        // Tắt nút Back mặc định
-        automaticallyImplyLeading: false,
-        // THAY THẾ NÚT BACK BẰNG NÚT HOME
+        elevation: 0,
+
+        // 🔙 NÚT QUAY LẠI
         leading: IconButton(
-          icon: const Icon(Icons.home),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Quay lại màn hình gốc (MyProduct)
-            Navigator.popUntil(context, (route) => route.isFirst);
+            Navigator.pop(context);
           },
         ),
-        // Xóa Actions nếu không muốn có thêm nút nào ở bên phải
-        actions: const [],
+
+        // 🏠 NÚT HOME
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+          ),
+        ],
       ),
-      // AnimatedBuilder lắng nghe thay đổi của giỏ hàng
+
       body: AnimatedBuilder(
         animation: cartService,
         builder: (context, child) {
           final cartItems = cartService.items;
+
+          // GIỎ HÀNG TRỐNG
           if (cartItems.isEmpty) {
             return const Center(
-              child: Text('Giỏ hàng trống. Mời bạn thêm sản phẩm!'),
+              child: Text(
+                'Giỏ hàng trống. Mời bạn thêm sản phẩm!',
+                style: TextStyle(fontSize: 16),
+              ),
             );
           }
 
           return Column(
             children: [
+              // DANH SÁCH SẢN PHẨM
               Expanded(
                 child: ListView.builder(
                   itemCount: cartItems.length,
@@ -47,6 +58,8 @@ class CartScreen extends StatelessWidget {
                   },
                 ),
               ),
+
+              // TỔNG TIỀN + THANH TOÁN
               buildCartSummary(context),
             ],
           );
@@ -55,8 +68,8 @@ class CartScreen extends StatelessWidget {
     );
   }
 
+  // ------------------ ITEM TRONG GIỎ ------------------
   Widget buildCartItem(BuildContext context, CartItem item) {
-    // ... (Code buildCartItem giữ nguyên)
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       elevation: 2,
@@ -66,19 +79,21 @@ class CartScreen extends StatelessWidget {
           width: 50,
           height: 50,
           fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return const Icon(Icons.image_not_supported);
+          },
         ),
+
         title: Text(
           item.product.title,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
+
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Giá: \$${item.product.price.toStringAsFixed(2)}',
-              style: const TextStyle(color: Colors.black87),
-            ),
+            Text('Giá: \$${item.product.price.toStringAsFixed(2)}'),
             Text(
               'Tổng: \$${item.totalPrice.toStringAsFixed(2)}',
               style: const TextStyle(
@@ -92,7 +107,6 @@ class CartScreen extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Giảm số lượng / Xoá sản phẩm
             IconButton(
               icon: Icon(
                 item.quantity > 1 ? Icons.remove : Icons.delete,
@@ -102,12 +116,12 @@ class CartScreen extends StatelessWidget {
                 cartService.updateQuantity(item.product.id, item.quantity - 1);
               },
             ),
-            // Số lượng
+
             Text(
               item.quantity.toString(),
               style: const TextStyle(fontSize: 16),
             ),
-            // Tăng số lượng
+
             IconButton(
               icon: const Icon(Icons.add, color: Colors.blue),
               onPressed: () {
@@ -120,14 +134,15 @@ class CartScreen extends StatelessWidget {
     );
   }
 
+  // ------------------ TỔNG TIỀN + THANH TOÁN ------------------
   Widget buildCartSummary(BuildContext context) {
-    // ... (Code buildCartSummary giữ nguyên)
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(top: BorderSide(color: Colors.grey.shade300)),
       ),
+
       child: Column(
         children: [
           Row(
@@ -147,7 +162,9 @@ class CartScreen extends StatelessWidget {
               ),
             ],
           ),
+
           const SizedBox(height: 15),
+
           ElevatedButton(
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(

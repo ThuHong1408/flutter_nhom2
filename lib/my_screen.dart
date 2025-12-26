@@ -19,7 +19,6 @@ class MyScreen extends StatelessWidget {
             item2(),
             item3(),
             item4(),
-            // 👉 chỉ phần này cuộn
             Expanded(child: item5()),
           ],
         ),
@@ -28,7 +27,6 @@ class MyScreen extends StatelessWidget {
   }
 }
 
-// --- Các phần nhỏ ---
 Widget item1() {
   return SizedBox(
     height: 80,

@@ -16,26 +16,33 @@ class ProductDetailScreen extends StatelessWidget {
         title: const Text('Chi Tiết Sản Phẩm'),
         backgroundColor: Colors.blueGrey,
         elevation: 0,
-        // Tắt nút Back mặc định
-        automaticallyImplyLeading: false,
-        // THAY THẾ NÚT BACK BẰNG NÚT HOME
+
+        // 🔙 NÚT QUAY LẠI
         leading: IconButton(
-          icon: const Icon(Icons.home),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Quay lại màn hình gốc (MyProduct)
-            Navigator.popUntil(context, (route) => route.isFirst);
+            Navigator.pop(context);
           },
         ),
-        // Xóa Actions nếu không muốn có thêm nút nào ở bên phải
-        actions: const [],
+
+        // 🏠 NÚT HOME
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+          ),
+        ],
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        // ... (Phần body giữ nguyên)
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // Hình ảnh sản phẩm
+            // ẢNH SẢN PHẨM
             Center(
               child: Container(
                 constraints: const BoxConstraints(maxHeight: 300),
@@ -54,7 +61,7 @@ class ProductDetailScreen extends StatelessWidget {
               ),
             ),
 
-            // Giá
+            // GIÁ
             Text(
               '\$${product.price.toStringAsFixed(2)}',
               style: const TextStyle(
@@ -66,7 +73,7 @@ class ProductDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            // Tiêu đề
+            // TÊN SẢN PHẨM
             Text(
               product.title,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -74,7 +81,7 @@ class ProductDetailScreen extends StatelessWidget {
 
             const Divider(height: 30),
 
-            // NÚT THÊM VÀO GIỎ HÀNG
+            // NÚT THÊM VÀO GIỎ
             AnimatedBuilder(
               animation: cartService,
               builder: (context, child) {
@@ -109,7 +116,7 @@ class ProductDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // Mô tả
+            // MÔ TẢ
             const Text(
               'Mô tả chi tiết:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
@@ -122,7 +129,7 @@ class ProductDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // Thể loại
+            // THỂ LOẠI
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(

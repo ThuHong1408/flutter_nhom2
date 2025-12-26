@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter_nhom2/my_product.dart';
 //import 'package:flutter_nhom2/Product.dart';
 //import 'package:flutter_nhom2/tinh_chi_so_BMI.dart';
 
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Access",
+      title: "TỔNG KẾT",
       home: TongKetCuoiNam(),
     );
   }

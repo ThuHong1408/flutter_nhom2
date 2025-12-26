@@ -4,11 +4,9 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 const String _apiKey = '1747702e5beb4c8a9e4b5e1efdb5554b';
-// Lấy tin tức hàng đầu của Mỹ
+
 const String _apiUrl =
     'https://newsapi.org/v2/top-headlines?country=us&apiKey=$_apiKey';
-
-// lib/models/article.dart
 
 class Article {
   final String? title;

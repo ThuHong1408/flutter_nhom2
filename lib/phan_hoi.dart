@@ -10,6 +10,8 @@ class PhanHoi extends StatefulWidget {
 }
 
 class _PhanHoiState extends State<PhanHoi> {
+  final _formKey = GlobalKey<FormState>();
+
   final _nameController = TextEditingController();
   final _contentController = TextEditingController();
   final _fileController = TextEditingController();
@@ -19,14 +21,12 @@ class _PhanHoiState extends State<PhanHoi> {
 
   final ImagePicker _picker = ImagePicker();
 
-  // Hàm chọn ảnh
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
         _selectedImage = File(pickedFile.path);
-        // Xử lý tên file (XFile.name có sẵn)
         _fileController.text = pickedFile.name;
       });
     }
@@ -40,6 +40,14 @@ class _PhanHoiState extends State<PhanHoi> {
     super.dispose();
   }
 
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Đã gửi phản hồi!")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,32 +59,34 @@ class _PhanHoiState extends State<PhanHoi> {
         ),
         centerTitle: true,
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: "Họ tên",
-                border: OutlineInputBorder(),
-              ),
-            ),
-
-            const SizedBox(height: 15),
-
-            // Dropdown sao
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: DropdownButtonFormField<int>(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              /// Họ tên
+              TextFormField(
+                controller: _nameController,
                 decoration: const InputDecoration(
-                  border: InputBorder.none,
+                  labelText: "Họ tên",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "Vui lòng nhập họ tên";
+                  }
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 15),
+
+              /// Đánh giá
+              DropdownButtonFormField<int>(
+                decoration: const InputDecoration(
                   labelText: "Đánh giá (1 - 5 sao)",
+                  border: OutlineInputBorder(),
                 ),
                 value: _selectedRating,
                 items: [1, 2, 3, 4, 5].map((value) {
@@ -87,74 +97,79 @@ class _PhanHoiState extends State<PhanHoi> {
                 }).toList(),
                 onChanged: (value) => setState(() => _selectedRating = value!),
               ),
-            ),
 
-            const SizedBox(height: 15),
+              const SizedBox(height: 15),
 
-            // Nội dung góp ý
-            TextField(
-              controller: _contentController,
-              maxLines: 4,
-              decoration: const InputDecoration(
-                labelText: "Nội dung góp ý",
-                border: OutlineInputBorder(),
-                alignLabelWithHint: true,
-              ),
-            ),
-
-            const SizedBox(height: 15),
-
-            // Ô để upload/đính kèm ảnh (readOnly, mở picker khi nhấn nút)
-            TextField(
-              controller: _fileController,
-              readOnly: true,
-              decoration: InputDecoration(
-                labelText: "Ảnh đính kèm",
-                hintText: "Chưa có ảnh",
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.upload_file),
-                  onPressed: _pickImage,
+              /// Nội dung
+              TextFormField(
+                controller: _contentController,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  labelText: "Nội dung góp ý",
+                  border: OutlineInputBorder(),
                 ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "Vui lòng nhập nội dung góp ý";
+                  }
+                  return null;
+                },
               ),
-            ),
 
-            const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
-            // Hiển thị ảnh đã chọn (nếu có)
-            if (_selectedImage != null)
-              Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey),
-                  image: DecorationImage(
-                    image: FileImage(_selectedImage!),
-                    fit: BoxFit.cover,
+              /// Upload ảnh
+              TextFormField(
+                controller: _fileController,
+                readOnly: true,
+                decoration: InputDecoration(
+                  labelText: "Ảnh đính kèm",
+                  hintText: "Chưa có ảnh",
+                  border: const OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.upload_file),
+                    onPressed: _pickImage,
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Vui lòng chọn ảnh";
+                  }
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 10),
+
+              if (_selectedImage != null)
+                Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey),
+                    image: DecorationImage(
+                      image: FileImage(_selectedImage!),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+
+              const SizedBox(height: 20),
+
+              /// Nút gửi
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: _submitForm,
+                  child: const Text(
+                    "Gửi phản hồi",
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
-
-            const SizedBox(height: 20),
-
-            // Nút gửi phản hồi
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                onPressed: () {
-                  // Ví dụ: show thông báo, có thể thay bằng logic gửi lên server
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Đã gửi phản hồi!")),
-                  );
-                },
-                child: const Text(
-                  "Gửi phản hồi",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

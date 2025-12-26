@@ -1,8 +1,6 @@
-// lib/cart_service.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_nhom2/product.dart';
 
-// Class đại diện cho một Item trong giỏ hàng
 class CartItem {
   final Product product;
   int quantity;
@@ -12,7 +10,6 @@ class CartItem {
   double get totalPrice => product.price * quantity;
 }
 
-// Service quản lý trạng thái giỏ hàng (sử dụng ChangeNotifier)
 class CartService with ChangeNotifier {
   final Map<int, CartItem> _items = {};
 
@@ -41,7 +38,6 @@ class CartService with ChangeNotifier {
     return _items.containsKey(product.id);
   }
 
-  // Sửa/Xóa số lượng
   void updateQuantity(int productId, int newQuantity) {
     if (!_items.containsKey(productId)) return;
 

@@ -38,7 +38,6 @@ class _CounterAppState extends State<CounterApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          // ===== NÚT QUAY LẠI =====
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
